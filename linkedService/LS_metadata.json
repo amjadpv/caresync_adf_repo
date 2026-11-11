@@ -1,0 +1,23 @@
+{
+	"name": "LS_metadata",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "caresyncind-server.database.windows.net",
+			"database": "sql_db_caresync",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "amdcaresync",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_keyvault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "metadata-db-pwd"
+			}
+		}
+	}
+}
