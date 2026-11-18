@@ -52,7 +52,14 @@
 						{
 							"name": "Ingest from source to silver",
 							"type": "ExecutePipeline",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "insert in progress status",
+									"dependencyConditions": [
+										"Skipped"
+									]
+								}
+							],
 							"policy": {
 								"secureInput": false
 							},
@@ -67,12 +74,16 @@
 									"table_id": {
 										"value": "@item().table_id",
 										"type": "Expression"
+									},
+									"adf_run_id": {
+										"value": "@pipeline().parameters.adf_run_id",
+										"type": "Expression"
 									}
 								}
 							}
 						},
 						{
-							"name": "Script1",
+							"name": "insert in progress status",
 							"type": "Script",
 							"dependsOn": [],
 							"policy": {
@@ -90,7 +101,47 @@
 							"typeProperties": {
 								"scripts": [
 									{
-										"type": "Query"
+										"type": "Query",
+										"text": {
+											"value": "insert into ctrl.audit_log (adf_run_id,table_id,stage,status,start_time) \nvalues (@{pipeline().parameters.adf_run_id},@{item().table_id},'SOURCE_TO_SILVER','IN_PROGRESS',SYSUTCDATETIME()) ",
+											"type": "Expression"
+										}
+									}
+								],
+								"scriptBlockExecutionTimeout": "02:00:00"
+							}
+						},
+						{
+							"name": "update failed status",
+							"type": "Script",
+							"dependsOn": [
+								{
+									"activity": "Ingest from source to silver",
+									"dependencyConditions": [
+										"Failed"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 2,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"linkedServiceName": {
+								"referenceName": "LS_metadata",
+								"type": "LinkedServiceReference"
+							},
+							"typeProperties": {
+								"scripts": [
+									{
+										"type": "Query",
+										"text": {
+											"value": "@update ctrl.audit_log set status = 'FAILED', end_time = SYSUTCDATETIME()\nwhere adf_run_id='@{pipeline().parameters.adf_run_id}' and table_id = @{item().table_id}",
+											"type": "Expression"
+										}
 									}
 								],
 								"scriptBlockExecutionTimeout": "02:00:00"
@@ -104,6 +155,10 @@
 			"source_system": {
 				"type": "string",
 				"defaultValue": "neon_postgres"
+			},
+			"adf_run_id": {
+				"type": "string",
+				"defaultValue": "a3"
 			}
 		},
 		"variables": {
