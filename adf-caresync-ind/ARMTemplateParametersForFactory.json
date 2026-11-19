@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-caresync-ind"
+		},
+		"LS_ADLS2_properties_typeProperties_url": {
+			"value": "https://caresyncindia2.dfs.core.windows.net/"
+		},
+		"LS_AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "1112-113400-wbjnmqvv"
+		},
+		"LS_PostgreSql_properties_typeProperties_server": {
+			"value": "ep-odd-haze-bd865dq6-pooler.c-8.us-east-2.aws.neon.tech"
+		},
+		"LS_PostgreSql_properties_typeProperties_database": {
+			"value": "neondb"
+		},
+		"LS_PostgreSql_properties_typeProperties_username": {
+			"value": "neondb_owner"
+		},
+		"LS_keyvault_properties_typeProperties_baseUrl": {
+			"value": "https://caresyncindia-keyvault.vault.azure.net/"
+		},
+		"LS_metadata_properties_typeProperties_server": {
+			"value": "caresyncind-server.database.windows.net"
+		},
+		"LS_metadata_properties_typeProperties_database": {
+			"value": "sql_db_caresync"
+		},
+		"LS_metadata_properties_typeProperties_userName": {
+			"value": "amdcaresync"
+		}
+	}
+}
