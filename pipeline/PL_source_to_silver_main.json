@@ -57,7 +57,7 @@
 								{
 									"activity": "insert in progress status",
 									"dependencyConditions": [
-										"Skipped"
+										"Succeeded"
 									]
 								}
 							],
@@ -159,7 +159,7 @@
 			},
 			"adf_run_id": {
 				"type": "string",
-				"defaultValue": "a3"
+				"defaultValue": "a"
 			}
 		},
 		"variables": {
